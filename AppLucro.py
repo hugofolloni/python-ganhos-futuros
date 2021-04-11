@@ -24,38 +24,11 @@ class Application:
         self.quartocontainer['padx'] = 20
         self.quartocontainer['pady'] = 60
 
+
         self.titulo = Label(self.primeirocontainer, text="Ajudante de Investimentos")
         self.titulo['font'] = ('Calibri', '15', 'bold')
         self.titulo.pack()
 
-        ativo = StringVar()
-
-        self.lblativo = Label(self.segundocontainer, text='Seu ativo:')
-        self.lblativo['font'] = self.fonttxt
-        self.lblativo.pack(side=LEFT)
-
-        self.entryativo = Entry(self.segundocontainer, textvariable = ativo)
-        self.entryativo['width'] = 15
-        self.entryativo['font'] = self.fontctn
-        self.entryativo.pack(side=LEFT)
-
-        self.btnativo = Button(self.segundocontainer, text="Confirmar!", font=self.fontctn, width=10, command=self.funcA)
-        self.btnativo.pack(side=RIGHT)
-
-        self.rsptativo = Label(self.terceirocontainer, text='')
-        self.rsptativo.pack()
-
-    def funcA(self):
-        self.btnativo['command'] = self.confativo()
-        self.btnativo['command'] = self.aparecer()
-
-    def confativo(self):
-        ativo = self.entryativo.get()
-        print(ativo)
-        self.rsptativo.config(text='Vamos estudar sobre o ativo {}!'.format(ativo))
-
-    def aparecer(self):
-        master = None
         self.ctntempo = Frame(master)
         self.ctntempo['padx'] = 20
         self.ctntempo['pady'] = 5
@@ -92,66 +65,87 @@ class Application:
         self.ctntotal.pack()
 
 
-        self.lbltempo = Label(self.ctntempo, text='Anos de investimento:', font=self.fonttxt, width=40)
-        self.lbltempo.pack(side=LEFT)
+        ativo = StringVar()
 
-        self.t = float()
+        self.lblativo = Label(self.segundocontainer, text='Seu ativo:')
+        self.lblativo['font'] = self.fonttxt
+        self.lblativo.pack(side=LEFT)
+
+        self.entryativo = Entry(self.segundocontainer, textvariable = ativo)
+        self.entryativo['width'] = 15
+        self.entryativo['font'] = self.fontctn
+        self.entryativo.pack(side=LEFT)
+
+        self.btnativo = Button(self.segundocontainer, text="Confirmar!", font=self.fontctn, width=10, command=self.aparecer)
+        self.btnativo.pack(side=RIGHT)
+
+        self.rsptativo = Label(self.terceirocontainer, text='')
+
+        self.tempo  = float()
         self.divy = float()
         self.invest = float()
         self.varano = float()
+        self.tempo = float()
+        self.totalvar = float()
+        self.totaldivy = float()
+        self.total = float()
 
-        self.enttempo = Entry(self.ctntempo, textvariable='t')
+        self.enttempo = Entry(self.ctntempo, textvariable='tempo')
         self.enttempo['width'] = 10
         self.enttempo['font'] = self.fontctn
-        self.enttempo.pack()
+        self.lbltempo = Label(self.ctntempo, text='Anos de investimento:', font=self.fonttxt, width=40)
 
-        self.lblvarano = Label(self.ctnvarano, text='Variação anual média do preço do ativo:', font=self.fonttxt,
-                               width=40)
-        self.lblvarano.pack(side=LEFT)
 
+        self.lblvarano = Label(self.ctnvarano, text='Variação anual média do preço do ativo:', font=self.fonttxt,width=40)
         self.entvarano = Entry(self.ctnvarano, textvariable='varano', width=10, font=self.fontctn)
-        self.entvarano.pack()
+
 
         self.lbldivy = Label(self.ctndivy, text='Dividend Yield médio: ', font=self.fonttxt, width=40)
-        self.lbldivy.pack(side=LEFT)
-
         self.entdivy = Entry(self.ctndivy, textvariable='divy', width=10, font=self.fontctn)
-        self.entdivy.pack()
+
 
         self.lblinvest = Label(self.ctninvest, text='Quanto já investiu no ativo:', width=40, font=self.fonttxt)
-        self.lblinvest.pack(side=LEFT)
-
         self.entinvest = Entry(self.ctninvest, textvariable='invest', width=10, font=self.fontctn)
-        self.entinvest.pack()
 
-        self.btnresult = Button(self.ctnbtn, text='Resultado', command=self.verResultado, width=10, font=self.fonttxt)
-        self.btnresult.pack()
-
+        self.btnresult = Button(self.ctnbtn, text='Resultado', command=self.ver_resultado, width=10, font=self.fonttxt)
         self.lblresult = Label(self.ctnresult, text='')
-        self.lblresult.pack()
-
         self.lbltotal = Label(self.ctnresult, text='', font=('Verdana', '10', 'bold'))
+
+
+    def aparecer(self):
+
+        ativo = self.entryativo.get()
+        print(ativo)
+        self.rsptativo.config(text='Vamos estudar sobre o ativo {}!'.format(ativo))
+
+        self.rsptativo.pack()
+        self.lbltempo.pack(side=LEFT)
+        self.enttempo.pack()
+        self.lblvarano.pack(side=LEFT)
+        self.entvarano.pack()
+        self.lbldivy.pack(side=LEFT)
+        self.entdivy.pack()
+        self.lblinvest.pack(side=LEFT)
+        self.entinvest.pack()
+        self.btnresult.pack()
+        self.lblresult.pack()
         self.lbltotal.pack()
 
-    def verResultado(self):
+    def ver_resultado(self):
 
-        self.t = float(self.enttempo.get())
+        self.tempo = float(self.enttempo.get())
         self.varano = float(self.entvarano.get())
         self.divy = float(self.entdivy.get())
         self.invest = float(self.entinvest.get())
 
-        self.totalvar = self.invest * ((1 + (self.varano / 100)) ** self.t)
-        self.totaldivy = self.invest * self.divy / 100 * self.t
-        self.total = self.totaldivy + self.totalvar + self.invest
+        self.totalvar = float(self.invest) * ((1 + (float(self.varano) / 100)) ** float(self.tempo))
+        self.totaldivy = float(self.invest) * float(self.divy) / 100 * float(self.tempo)
+        self.total = float(self.totaldivy) + float(self.totalvar) + float(self.invest)
 
-        self.t = float(self.t)
-        self.totalvar = float(self.totalvar)
-        self.totaldivy = float(self.totaldivy)
-        self.total = float(self.total)
-
-        self.lblresult.config(text="Seu investimento renderá, dentro de {:.0f} anos, {:.2f} reais em valorização e {:.2f} reais em dividendos".format(self.t, self.totalvar, self.totaldivy))
+        self.lblresult.config(text="Seu investimento renderá, dentro de {:.0f} anos, {:.2f} reais em valorização e {:.2f} reais em dividendos".format(self.tempo, self.totalvar, self.totaldivy))
         self.lbltotal.config(text='O total será de {:.2f} reais!'.format(self.total))
 
 root = Tk()
 Application(root)
 root.mainloop()
+
